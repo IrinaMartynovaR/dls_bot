@@ -29,40 +29,40 @@ model = AutoModelForCausalLM.from_pretrained(
 # Перевод модели в режим оценки
 model.eval()
 
-# Пример текста для генерации
-input_text = "Как научиться писать код?"
-inputs = tokenizer(input_text, return_tensors="pt").to(device)
+# # Пример текста для генерации
+# input_text = "Как научиться писать код?"
+# inputs = tokenizer(input_text, return_tensors="pt").to(device)
 
-# Генерация текста
-with torch.no_grad():
-    outputs = model.generate(
-        inputs.input_ids,
-        max_length=8,  # Максимальная длина генерируемого текста
-        num_return_sequences=1,  # Количество генерируемых последовательностей
-        do_sample=True,  # Включение сэмплинга для разнообразия текста
-        top_k=10,  # Использование top-k sampling
-        top_p=0.95,  # Использование top-p (nucleus) sampling
-        temperature=0.5  # Температура сэмплинга
-    )
+# # Генерация текста
+# with torch.no_grad():
+#     outputs = model.generate(
+#         inputs.input_ids,
+#         max_length=8,  # Максимальная длина генерируемого текста
+#         num_return_sequences=1,  # Количество генерируемых последовательностей
+#         do_sample=True,  # Включение сэмплинга для разнообразия текста
+#         top_k=10,  # Использование top-k sampling
+#         top_p=0.95,  # Использование top-p (nucleus) sampling
+#         temperature=0.5  # Температура сэмплинга
+#     )
 
-# Декодирование и вывод генерируемого текста
-generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+# # Декодирование и вывод генерируемого текста
+# generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-inputs = tokenizer(input_text, return_tensors="pt").to(device)
-def generate_response(prompt):
+# inputs = tokenizer(input_text, return_tensors="pt").to(device)
+def generate_response(prompt, max_chars=3096):
     inputs = tokenizer(prompt, return_tensors="pt").to(device)
     with torch.no_grad():
         outputs = model.generate(
             inputs.input_ids,
-            max_length=5,  # Максимальная длина генерируемого текста
+            max_length=1,  # Максимальная длина генерируемого текста
             num_return_sequences=1,  # Количество генерируемых последовательностей
-            do_sample=True,  # Включение сэмплинга для разнообразия текста
-            top_k=5,  # Использование top-k sampling
+            do_sample=False,  # Включение сэмплинга для разнообразия текста
+            top_k=8,  # Использование top-k sampling
             top_p=0.95,  # Использование top-p (nucleus) sampling
-            temperature=0.6  # Температура сэмплинга
+            temperature=0.5  # Температура сэмплинга
         )
-    return tokenizer.decode(outputs[0], skip_special_tokens=True)
+    response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    return response[:max_chars]
 
     
-response = generate_response("Как написать алгоритм быстрого поиска?")
-print("Модель: ", response)
+
