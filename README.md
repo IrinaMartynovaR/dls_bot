@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # Telegram Chatbot for Model Training
 
 ## Overview
@@ -62,6 +62,3 @@ Ensure you have the following installed:
     - The script will generate text based on the trained model.
 
 
-=======
-# dls_bot
->>>>>>> 56109b94651ea4d3e9b29d996fdfcdb9af7676c2
