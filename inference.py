@@ -49,18 +49,19 @@ model.eval()
 # generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
 
 # inputs = tokenizer(input_text, return_tensors="pt").to(device)
-def generate_response(prompt, max_chars=3096):
+def generate_response(prompt, max_chars=2096):
     inputs = tokenizer(prompt, return_tensors="pt").to(device)
     with torch.no_grad():
         outputs = model.generate(
             inputs.input_ids,
-            max_length=1,  # Максимальная длина генерируемого текста
+            max_length=2,  # Максимальная длина генерируемого текста
+            max_new_tokens = 512,  # Минимальная длина генерируемого текста
             num_return_sequences=1,  # Количество генерируемых последовательностей
-            do_sample=False,  # Включение сэмплинга для разнообразия текста
-            top_k=8,  # Использование top-k sampling
-            top_p=0.95,  # Использование top-p (nucleus) sampling
-            temperature=0.5  # Температура сэмплинга
-        )
+            do_sample=True,  # Включение сэмплинга для разнообразия текста
+            top_k=2,  # Использование top-k sampling
+            top_p=0.7,  # Использование top-p (nucleus) sampling
+            temperature=0.7,  # Температура сэмплинга
+            early_stopping=True)  # Остановка генерации при достижении конца
     response = tokenizer.decode(outputs[0], skip_special_tokens=True)
     return response[:max_chars]
 
